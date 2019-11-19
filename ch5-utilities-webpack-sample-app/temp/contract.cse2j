@@ -1,0 +1,34 @@
+{
+	"name": "Am101_Xpanel",
+	"timestamp": "2019-10-22 19:48:01.781",
+	"version": "6",
+	"schema_version": 1,
+	"extra_value": " MayankSampleTest",
+	"signals": {
+		"states": {
+			"boolean": {
+				"1": {
+					"1": "Light.On_fb",
+					"2": "Light.Off_fb"
+				}
+			},
+			"string": {
+				"1": {
+					"1": "Light.State_fb"
+				}
+			}
+		},
+		"events": {
+			"boolean": {
+				"Light.On": {
+					"joinId": 1,
+					"smartObjectId": 1
+				},
+				"Light.Off": {
+					"joinId": 2,
+					"smartObjectId": 1
+				}
+			}
+		}
+	}
+}
