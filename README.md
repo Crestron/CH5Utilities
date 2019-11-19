@@ -1,2 +1,42 @@
-# CH5Utilities
-Source code associated with @crestron/ch5-utilities and @crestron/ch5-utililities-cli NPM libraries and apps
+<p align="center">
+  <img src="https://kenticoprod.azureedge.net/kenticoblob/crestron/media/crestron/generalsiteimages/crestron-logo.png">
+</p>
+ 
+# CH5 Utilities and CLI - Getting Started
+
+#### Continuous Integration and Deployment Status
+
+| DEV NIGHTLY - latest-dev | Status |
+| ------ | ----------- |
+| Build Pipeline | Work In Progress |
+| Release Pipeline - Azure Blob | Work In Progress |
+| Release Pipeline - Publish to NPM | Work In Progress |
+| NPM CH5 Utilities | ![npm (tag)](https://img.shields.io/npm/v/@crestron/ch5-utilities/latest-dev) |
+| NPM CH5 Utilities CLI | ![npm (tag)](https://img.shields.io/npm/v/@crestron/ch5-utilities-cli/latest-dev) |
+
+| MASTER-QE - latest-qe | Status |
+| ------ | ----------- |
+| Build Pipeline | Work In Progress |
+| Release Pipeline - Azure Blob | Work In Progress |
+| Release Pipeline - Publish to NPM | Work In Progress |
+| NPM CH5 Utilities | ![npm (tag)](https://img.shields.io/npm/v/@crestron/ch5-utilities/latest-qe) |
+| NPM CH5 Utilities CLI | ![npm (tag)](https://img.shields.io/npm/v/@crestron/ch5-utilities-cli/latest-qe) |
+
+#### Getting Started
+This is the main readme file for the **CH5 utilities** apps.
+The current folder contains three subfolders/packages: 
+
+* **ch5-utilities** - this contains the bulk of functionality for the ``archiver`` and `` distributor`` features.
+* **ch5-utilities-cli** - this implements the **ch5-utilities** as a CLI application. 
+* **ch5-utilities-webpack-plugin** - this implements the **ch5-utilities** as a pair of webpack plugins. The folder ch5-utilities-webpack-sample-app contains an example how to use it.
+
+### Setup
+
+#### Method 1 - one by one
+
+Go through the setup section of each readme file (linked below). The [ch5-utilities](./ch5-utilities/readme.md) should be first, since the other two projects depend on it.
+
+#### Method 2 - all
+
+Just run `yarn setup` in the apps folder and will create the setup for each project.
+After this, you can use `yarn publish:all` to rebuild and publish all projects.
