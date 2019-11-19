@@ -35,8 +35,12 @@ The current folder contains three subfolders/packages:
 #### Method 1 - one by one
 
 Go through the setup section of each readme file (linked below). The [ch5-utilities](./ch5-utilities/readme.md) should be first, since the other two projects depend on it.
+- [CH5 Utilities](./ch5-utilities/README.md)
+- [CH5 Utilities CLI](./ch5-utilities-cli/README.md)
+- [CH5 Utilities Webpack Plugin](./ch5-utilities-webpack-plugin/README.md)
+- [CH5 Utilities Webpack Sample App](./ch5-utilities-webpack-sample-app/README.md)
 
 #### Method 2 - all
 
-Just run `yarn setup` in the apps folder and will create the setup for each project.
+Just run `yarn setup` in the current folder, this will create the setup for each project.
 After this, you can use `yarn publish:all` to rebuild and publish all projects.
