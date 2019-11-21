@@ -8,7 +8,7 @@
 
 | DEV NIGHTLY - latest-dev | Status |
 | ------ | ----------- |
-| Build Pipeline | Work In Progress |
+| Build Pipeline | ![Build status](https://dev.azure.com/crestron-mobile-devops/MobileApps/_apis/build/status/Blackbird/CoreBuild/CH5Utilities?branchName=dev) |
 | Release Pipeline - Azure Blob | Work In Progress |
 | Release Pipeline - Publish to NPM | Work In Progress |
 | NPM CH5 Utilities | ![npm (tag)](https://img.shields.io/npm/v/@crestron/ch5-utilities/latest-dev) |
@@ -16,7 +16,7 @@
 
 | MASTER-QE - latest-qe | Status |
 | ------ | ----------- |
-| Build Pipeline | Work In Progress |
+| Build Pipeline | ![Build status](https://dev.azure.com/crestron-mobile-devops/MobileApps/_apis/build/status/Blackbird/CoreBuild/CH5Utilities?branchName=master) |
 | Release Pipeline - Azure Blob | Work In Progress |
 | Release Pipeline - Publish to NPM | Work In Progress |
 | NPM CH5 Utilities | ![npm (tag)](https://img.shields.io/npm/v/@crestron/ch5-utilities/latest-qe) |
