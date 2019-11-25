@@ -10,6 +10,7 @@
 | ------ | ----------- |
 | Build Pipeline | ![Build status](https://dev.azure.com/crestron-mobile-devops/MobileApps/_apis/build/status/Blackbird/CoreBuild/CH5Utilities?branchName=dev) |
 | Release Pipeline - Blob, NPM | ![Build status](https://vsrm.dev.azure.com/crestron-mobile-devops/_apis/public/Release/badge/0403b700-ab40-43cd-9990-961924c561bc/33/84) |
+| NPM CH5 Utilities | ![npm (tag)](https://img.shields.io/npm/v/@crestron/ch5-utilities/latest-dev) |
 | NPM CH5 Utilities CLI | ![npm (tag)](https://img.shields.io/npm/v/@crestron/ch5-utilities-cli/latest-dev) |
 
 | MASTER-QE - latest-qe | Status |
