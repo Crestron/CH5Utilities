@@ -1,3 +1,12 @@
+# Project specific
+build
+output-test
+dist
+temp
+
+# Webstorm
+.idea
+
 # Logs
 logs
 *.log

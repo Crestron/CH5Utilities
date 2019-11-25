@@ -1,0 +1,22 @@
+{
+  "name": "@crestron/ch5-utilities-setup",
+  "version": "0.0.1",
+  "description": "Crestron CH5 utilities setup",
+  "scripts": {
+    "clean:ch5-utilities": "cd ch5-utilities && yarn clean",
+    "clean:ch5-utilities-cli": "cd ch5-utilities-cli && yarn clean",
+    "clean:ch5-utilities-webpack": "cd ch5-utilities-webpack-plugin && yarn clean",
+    "clean:all": "yarn clean:ch5-utilities && yarn clean:ch5-utilities-cli && yarn clean:ch5-utilities-webpack",
+    "publish:ch5-utilities": "cd ch5-utilities && yarn publish:local",
+    "publish:ch5-utilities-cli": "cd ch5-utilities-cli && yarn publish:local",
+    "publish:ch5-utilities-webpack": "cd ch5-utilities-webpack-plugin && yarn publish:local",
+    "publish:all": "yarn publish:ch5-utilities && yarn publish:ch5-utilities-cli && yarn publish:ch5-utilities-webpack",
+    "setup:ch5-utilities": "cd ch5-utilities && yarn setup:local",
+    "setup:ch5-utilities-cli": "cd ch5-utilities-cli && yarn setup:local",
+    "setup:ch5-utilities-webpack": "cd ch5-utilities-webpack-plugin && yarn setup:local",
+    "setup:ch5-utilities-webpack-sample-app": "cd ch5-utilities-webpack-sample-app && yarn setup:local",
+    "setup": "yarn setup:ch5-utilities && yarn setup:ch5-utilities-cli && yarn setup:ch5-utilities-webpack && yarn setup:ch5-utilities-webpack-sample-app"
+  },
+  "author": "Crestron",
+  "license": "SEE LICENSE IN LICENSE.txt"
+}
