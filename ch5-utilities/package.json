@@ -35,11 +35,8 @@
   "license": "SEE LICENSE IN LICENSE.txt",
   "dependencies": {
     "archiver": "3.0.0",
-    "async": "^2.6.2",
-    "copy-files-from-to": "1.1.0",
     "fs": "0.0.1-security",
     "lodash": "4.17.11",
-    "readline-sync": "1.4.9",
     "rimraf": "2.6.3",
     "sha256-file": "^1.0.0",
     "ssh2": "0.8.2",
@@ -50,10 +47,10 @@
     "@types/async": "^2.4.1",
     "@types/lodash": "4.14.123",
     "@types/node": "^11.11.5",
-    "@types/readline-sync": "1.4.3",
     "@types/rimraf": "2.0.2",
     "@types/ssh2": "0.5.38",
     "@types/ssh2-sftp-client": "2.4.1",
+    "async": "^2.6.2",
     "ts-node": "8.0.3",
     "tsc": "1.20150623.0",
     "typescript": "3.3.3333"
