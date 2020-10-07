@@ -23,7 +23,7 @@ export class WebpackCh5DeployPlugin implements Plugin {
         deviceType: WebpackCh5DeployPlugin.getDeviceType(Env.CH5_HOST_DEVICE_TYPE as string)
       } as IConfigOptions;
 
-      const validationErrors = WebpackCh5DeployPlugin.validateConfig( configOptions);
+      const validationErrors = WebpackCh5DeployPlugin.validateConfig(configOptions);
       if (validationErrors.length > 0) {
         console.error(validationErrors.join('. '));
         return;
@@ -47,14 +47,14 @@ export class WebpackCh5DeployPlugin implements Plugin {
       errors.push('Target host is empty.');
     }
 
-    if(isNil(config.deviceType)){
+    if (isNil(config.deviceType)) {
       errors.push('Target host device type is empty.');
     }
 
     return errors;
   }
 
-  private static getArchivePath(): string{
+  private static getArchivePath(): string {
     return `${Env.CH5_TARGET_DIRECTORY}/${Env.CH5_PROJECT_NAME}.ch5z`;
   }
 
@@ -65,7 +65,9 @@ export class WebpackCh5DeployPlugin implements Plugin {
       case 'controlsystem':
         return DeviceType.ControlSystem;
       case 'web':
-        return DeviceType.WebServer;
+        return DeviceType.Web;
+      case 'mobile':
+        return DeviceType.Mobile;
       default:
         throw new Error(`Unknown device type ${deviceTypeInput}`);
     }
