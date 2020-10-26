@@ -6,6 +6,7 @@
 // under which you licensed this source code.
 
 import * as commander from "commander";
+import path from 'path';
 import { IConfigOptions } from "@crestron/ch5-utilities/build/@types/interfaces";
 import { distributor } from "@crestron/ch5-utilities";
 import { Ch5CliUtil } from "./Ch5CliUtil";
@@ -23,9 +24,9 @@ export class Ch5DeployCli {
     program
       .command('deploy <archive>')
       .option("-H, --deviceHost <deviceHost>", "Device host or IP. Required.")
-      .option("-t, --deviceType <deviceType>", "Device type, value in [touchscreen, controlsystem, web]. Required.", /^(touchscreen|controlsystem|web)$/i)
+      .option("-t, --deviceType <deviceType>", "Device type, value in [touchscreen, controlsystem, web, mobile]. Required.", /^(touchscreen|controlsystem|web|mobile)$/i)
       .option("-d, --deviceDirectory <deviceDirectory>",
-      "Device target deploy directory. Defaults to 'display' when deviceType is touchscreen, to 'HTML' when deviceType is controlsystem. Optional.")
+      "Device target deploy directory. Defaults to 'display' when deviceType is touchscreen, to 'HTML' when deviceType is controlsystem/web/mobile. Optional.")
       .option("-p, --prompt-for-credentials", "Prompt for credentials. Optional.")
       .option("-q, --quiet [quiet]", "Don\'t display messages. Optional.")
       .option("-vvv, --verbose [verbose]", "Verbose output. Optional.")
@@ -43,14 +44,15 @@ export class Ch5DeployCli {
 
     let deviceType = this._cliUtil.getDeviceType(options.deviceType);
 
-    const userAndPassword = await this.getUserAndPassword(options.promptForCredentials);
+    const credentials = await this.getUserAndPassword(options.promptForCredentials);
 
     let configOptions = {
+      projectName: path.parse(archive).name,
       controlSystemHost: options.deviceHost,
       deviceType: deviceType,
       sftpDirectory: options.deviceDirectory,
-      sftpUser: userAndPassword.user,
-      sftpPassword: userAndPassword.password,
+      sftpUser: credentials.user,
+      sftpPassword: credentials.password,
       outputLevel: this._cliUtil.getOutputLevel(options)
     } as IConfigOptions;
     await distributor(archive, configOptions);
@@ -83,28 +85,33 @@ export class Ch5DeployCli {
   }
 
   private async getUserAndPassword(promptForCredentials: boolean): Promise<any> {
+
     if (!promptForCredentials) {
-      return {
-        user: 'crestron',
-        password: ''
-      }
+      // if empty, default values from @crestron/ch5-utilities will be used
+      return this.getCredentialsFromEnvironmentVariables();
     }
+    
     return await inquirer.prompt(
       [
         {
           type: 'string',
           message: 'Enter SFTP user',
           name: 'user',
-          default: 'crestron',
         },
         {
           type: 'password',
           message: 'Enter SFTP password',
           name: 'password',
-          mask: '*',
-          default: ''
+          mask: '*'
         }
       ]
     );
+  }
+
+  private getCredentialsFromEnvironmentVariables(): { user: string | undefined, password: string | undefined } {
+    return {
+      user: process.env["CH5CLI_DEPLOY_USER"],
+      password: process.env["CH5CLI_DEPLOY_PW"]
+    };
   }
 }
