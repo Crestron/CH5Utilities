@@ -38,7 +38,13 @@ export class Ch5Distributor {
     distributorOptions.sftpDirectory = Ch5Distributor.getSftpDirectory(distributorOptions);
     distributorOptions.sftpUser = Ch5Distributor.getSftpUser(distributorOptions);
     distributorOptions.sftpPassword = Ch5Distributor.getSftpPassword(distributorOptions);
+    distributorOptions.privateKey = Ch5Distributor.getPrivateKey(distributorOptions);
+    distributorOptions.passphrase = Ch5Distributor.getPassphrase(distributorOptions);
 
+    if (distributorOptions.deviceType === DeviceTypeEnum.TouchScreen && distributorOptions.slowMode) {
+      this._logger.info(`Sending ${IoConstants.touchScreenUpdateCommand} command to device...`);
+      await this._utils.runSshCommand(distributorOptions, IoConstants.touchScreenUpdateCommand);
+    }
     await this.transferFiles(distributorOptions, filename);
     await this.reloadDevice(distributorOptions, filename);
   }
@@ -61,39 +67,44 @@ export class Ch5Distributor {
       default:
         throw new Error('Unknown device type');
     }
+
     this._logger.info(IoConstants.sendReloadCommandToDevice(distributorOptions.deviceType) + ':' + command);
-    await this._utils.runRestartSshCommand(distributorOptions, command);
+    await this._utils.runSshCommand(distributorOptions, command);
   }
 
   private async transferFiles(distributorOptions: IConfigOptions, filename: string): Promise<void> {
-    const sftpOption = {
-      host: distributorOptions.controlSystemHost,
-      username: distributorOptions.sftpUser,
-      password: distributorOptions.sftpPassword,
-    };
-
     const sftp = new Client();
-    try {
-      await sftp.connect(sftpOption);
 
+    try {
+      await sftp.connect(this._utils.getConnectOptions(distributorOptions));
+      let { sftpDirectory } = distributorOptions;
       this._logger.info(IoConstants.connectedToDeviceAndUploading);
 
-      const targetPath = `${distributorOptions.sftpDirectory}/${path.basename(filename)}`;
-      this._logger.debug(targetPath);
 
-      const pathExists = await sftp.exists(distributorOptions.sftpDirectory);
+      if (distributorOptions.deviceType === DeviceTypeEnum.Web) {
+        // find if output directory is HTML or html
+        const matchingDirs = await sftp.list('/', `${sftpDirectory.toUpperCase()}|${sftpDirectory.toLowerCase()}`);
+        sftpDirectory = `/${matchingDirs[0].name}/${distributorOptions.projectName}`;
+      }
+
+      const targetPath = `${sftpDirectory}/${path.basename(filename)}`;
+      const pathExists = await sftp.exists(sftpDirectory);
+
       // checking if path is a directory. Creating it otherwise
       if (pathExists !== 'd') {
-        this._logger.debug(`Creating directory ${distributorOptions.sftpDirectory}.`);
-        await sftp.mkdir(`${distributorOptions.sftpDirectory}`, true);
-        this._logger.debug(`Created directory ${distributorOptions.sftpDirectory}. Now uploading`);
+        this._logger.debug(`Creating directory ${sftpDirectory}.`);
+        await sftp.mkdir(`${sftpDirectory}`, true);
+        this._logger.debug(`Created directory ${sftpDirectory}. Now uploading`);
       }
-      this._logger.debug(`Trying to upload file to ${targetPath}.`);
-      await sftp.fastPut(filename, targetPath);
-      this._logger.debug(`Uploaded file.`);
 
+      this._logger.debug(`Trying to upload file to ${targetPath}.`);
+      await sftp.put(filename, targetPath, { autoClose: false });
+      this._logger.debug(`Uploaded file.`);
     } catch (err) {
       throw new Error(IoConstants.errorOnConnectingToHostWithError(distributorOptions.controlSystemHost, err.message));
+    } finally {
+      await sftp.end();
+      this._logger.debug('Closing sftp connection.');
     }
   }
 
@@ -107,9 +118,8 @@ export class Ch5Distributor {
         return IoConstants.touchScreenSftpDirectory;
       case DeviceTypeEnum.ControlSystem:
       case DeviceTypeEnum.Mobile:
-        return IoConstants.controlSystemSftpDirectory;
       case DeviceTypeEnum.Web:
-        return `/${IoConstants.controlSystemSftpDirectory}/${distributorOptions.projectName}`;
+        return IoConstants.controlSystemSftpDirectory;
       default:
         throw new Error('SFTP directory is not set.');
     }
@@ -121,5 +131,13 @@ export class Ch5Distributor {
 
   private static getSftpPassword(distributorOptions: IConfigOptions) {
     return distributorOptions.sftpPassword || IoConstants.defaultPassword;
+  }
+
+  private static getPrivateKey(distributorOptions: IConfigOptions) {
+    return distributorOptions.privateKey || undefined;
+  }
+
+  private static getPassphrase(distributorOptions: IConfigOptions) {
+    return distributorOptions.passphrase || undefined;
   }
 }

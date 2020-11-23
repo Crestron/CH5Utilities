@@ -86,7 +86,7 @@ export class Utils implements IUtils {
    * @param distributorOptions
    * @param command
    */
-  public runRestartSshCommand(distributorOptions: IConfigOptions, command: string): Promise<string> {
+  public runSshCommand(distributorOptions: IConfigOptions, command: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       const ssh2 = new Client();
       ssh2.on('ready', () => {
@@ -95,7 +95,7 @@ export class Utils implements IUtils {
         ssh2.exec(command, (err: Error, stream: ClientChannel) => {
           if (err) throw err;
           stream.on('close', () => {
-            this._logger.debug(IoConstants.deviceRestarted);
+            this._logger.debug(IoConstants.connectionClosed);
             ssh2.end();
           }).on('data', (data: string) => {
             this._logger.debug(IoConstants.deviceOutput(data));
@@ -107,11 +107,31 @@ export class Utils implements IUtils {
       }).on('end', () => {
         this._logger.info(IoConstants.connectionEnded);
         resolve('done');
-      }).connect({
-        host: distributorOptions.controlSystemHost,
-        username: distributorOptions.sftpUser,
-        password: distributorOptions.sftpPassword
-      });
+      }).connect(this.getConnectOptions(distributorOptions));
     });
+  }
+
+  public getConnectOptions(distributorOptions: IConfigOptions) {
+    let options: {
+      host: string,
+      username: string,
+      password?: string,
+      passphrase?: string,
+      privateKey?: Buffer
+    } = {
+      host: distributorOptions.controlSystemHost,
+      username: distributorOptions.sftpUser,
+    };
+
+    if (distributorOptions.privateKey) {
+      options.privateKey = fs.readFileSync(distributorOptions.privateKey);
+      if (distributorOptions.passphrase) {
+        options.passphrase = distributorOptions.passphrase;
+      }
+    } else {
+      options.password = distributorOptions.sftpPassword;
+    }
+
+    return options;
   }
 }
