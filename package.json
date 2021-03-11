@@ -4,6 +4,7 @@
   "description": "Crestron CH5 utilities setup",
   "scripts": {
     "clean:ch5-utilities": "cd ch5-utilities && yarn clean",
+    "check:ch5-shell-cli": "",
     "clean:ch5-utilities-cli": "cd ch5-utilities-cli && yarn clean",
     "clean:ch5-utilities-webpack": "cd ch5-utilities-webpack-plugin && yarn clean",
     "clean:all": "yarn clean:ch5-utilities && yarn clean:ch5-utilities-cli && yarn clean:ch5-utilities-webpack",
