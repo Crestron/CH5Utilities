@@ -92,7 +92,7 @@ export class Utils implements IUtils {
       ssh2.on('ready', () => {
         this._logger.info(IoConstants.connectViaSsh);
 
-        ssh2.exec(command, (err: Error, stream: ClientChannel) => {
+        ssh2.exec(command, (err: Error | undefined, stream: ClientChannel) => {
           if (err) throw err;
           stream.on('close', () => {
             this._logger.debug(IoConstants.connectionClosed);

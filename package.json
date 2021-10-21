@@ -38,16 +38,16 @@
     "lodash": "^4.17.20",
     "rimraf": "2.6.3",
     "sha256-file": "^1.0.0",
-    "ssh2": "0.8.2",
-    "ssh2-sftp-client": "5.3.1"
+    "ssh2": "^1.5.0",
+    "ssh2-sftp-client": "^7.1.0"
   },
   "devDependencies": {
     "@types/archiver": "2.1.2",
     "@types/lodash": "4.14.123",
     "@types/node": "^11.11.5",
     "@types/rimraf": "2.0.2",
-    "@types/ssh2": "0.5.38",
-    "@types/ssh2-sftp-client": "5.3.0",
+    "@types/ssh2": "0.5.48",
+    "@types/ssh2-sftp-client": "7.0.0",
     "ts-node": "8.0.3",
     "typescript": "3.3.3333"
   },
