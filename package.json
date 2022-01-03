@@ -33,19 +33,16 @@
   "author": "Crestron",
   "license": "SEE LICENSE IN LICENSE.txt",
   "dependencies": {
-    "archiver": "3.0.0",
-    "fs": "0.0.1-security",
-    "lodash": "^4.17.20",
-    "rimraf": "2.6.3",
+    "archiver": "^5.3.0",
+    "rimraf": "^3.0.2",
     "sha256-file": "^1.0.0",
     "ssh2": "^1.5.0",
     "ssh2-sftp-client": "^7.1.0"
   },
   "devDependencies": {
-    "@types/archiver": "2.1.2",
-    "@types/lodash": "4.14.123",
+    "@types/archiver": "^5.1.1",
     "@types/node": "^11.11.5",
-    "@types/rimraf": "2.0.2",
+    "@types/rimraf": "^3.0.2",
     "@types/ssh2": "0.5.48",
     "@types/ssh2-sftp-client": "7.0.0",
     "ts-node": "8.0.3",
