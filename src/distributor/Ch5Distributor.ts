@@ -100,7 +100,7 @@ export class Ch5Distributor {
       this._logger.debug(`Trying to upload file to ${targetPath}.`);
       await sftp.put(filename, targetPath, { writeStreamOptions: { autoClose: false }, readStreamOptions: { autoClose: false } });
       this._logger.debug(`Uploaded file.`);
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(IoConstants.errorOnConnectingToHostWithError(distributorOptions.controlSystemHost, err.message));
     } finally {
       await sftp.end();
