@@ -11,8 +11,8 @@ import { DeviceTypeEnum, OutputLevelEnum } from './enums';
 import { archiver, distributor } from "./index";
 
 const config: IConfigOptions = {
-  "projectName": "showcase-app",
-  "directoryName": "../../library/showcase-app/dist",
+  "projectName": "ch5-showcase-app",
+  "directoryName": "../CH5ShowcaseApp/dist/downloads/ShowcaseApp",
   "outputDirectory": "output-test",
   "outputLevel": OutputLevelEnum.Verbose,
   "additionalAppuiManifestParameters": {
@@ -25,16 +25,19 @@ const config: IConfigOptions = {
     "testing-metadata": "testing-metadata",
     "testing-metadata1": "testing-metadata2"
   },
-  "controlSystemHost": "192.168.2.44",
+  "controlSystemHost": "10.0.0.203",
   "sftpUser": "crestron",
   "sftpPassword": "",
-  "promptForCredential": false,
+  "promptForCredential": true,
   "sftpDirectory": "display",
   "deviceType": DeviceTypeEnum.TouchScreen,
   "contractFile": undefined,
   "privateKey": undefined,
   "passphrase": undefined,
-  "slowMode": false
+  "slowMode": false,
+  "appUiManifestParams": "",
+  "projectManifestParams": "",
+  "sourceArchive": ""
 };
 
 let commands = process.argv;
