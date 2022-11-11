@@ -78,29 +78,18 @@ export class Ch5Archiver implements ICh5Archiver {
     const resultCH5z: Promise<void> = extract(options.sourceArchive, { dir: options.outputDirectory });
     const onExtractionCH5zComplete = async () => {
       const ch5 = options.outputDirectory + '/' + options.sourceArchive.replace(".ch5z", ".ch5");
-      console.log("Extraction complete", ch5);
       const manifest = options.outputDirectory + '/' + options.sourceArchive.replace(".ch5z", "_manifest.json");
-      console.log("Extraction complete", manifest);
       const json = require(manifest);
       const oldProjectName = json["projectname"];
       const oldDirectoryName = options.directoryName;
-      console.log("before renaming project name", json);
       json["projectname"] = options.projectName + ".ch5";
-      console.log("after renaming project name", json);
       options.directoryName = options.outputDirectory;
       const onExtractionCH5Complete = async () => {
-        /*
-        validate app contents
-        */
         options.directoryName = options.outputDirectory + "/temp";
-        console.log("TEMP directoryName", options.directoryName);
         options.outputDirectory = options.outputDirectory + "/ch5";
-        console.log("CH5 outputDirectory", options.outputDirectory);
         // inner ch5
         await this.archive(options, ArchiveExtensions.CH5_EXTENSION).then(async () => {
           const oldFullPath = `${oldDirectoryName}/${oldProjectName}z`;
-          console.log("Renamed from", oldFullPath.replace("//", '/'));
-          console.log(`Renamed to ${options.outputDirectory}/${options.projectName}.ch5z`);
           const fs = require('fs');
           const callback = (err: any) => {
             if (err) {
@@ -108,22 +97,25 @@ export class Ch5Archiver implements ICh5Archiver {
             }
           };
           const newManifest = `${options.outputDirectory}/${options.projectName}_manifest.json`;
-          console.log("CH5 Manifest", newManifest);
-          // fs.copyFile(manifest, newManifest, callback);
           fs.writeFile(newManifest, JSON.stringify(json), callback);
-          options.outputDirectory = options.outputDirectory.replace("/ch5", "/ch5z");
-          console.log("CH5Z outputDirectory", options.outputDirectory);
-          // final ch5z
+          options.outputDirectory = options.outputDirectory.replace("/ch5", "");
           options.directoryName = options.directoryName.replace("/temp", "/ch5");
-          console.log("CH5Z directoryName", options.directoryName);
+          // final ch5z
           await this.archive(options, ArchiveExtensions.CH5Z_EXTENSION).then(() => {
-            // this._utils.deleteDirectory("ch5");
-            // this._utils.deleteDirectory("temp");
+            console.log("delete temporary file", ch5);
+            fs.rm(ch5, callback);
+            console.log("delete temporary file", manifest);
+            fs.rm(manifest, callback);
+            console.log("delete temporary folder", "/ch5");
+            this._utils.deleteDirectory(options.outputDirectory + "/ch5");
+            console.log("delete temporary folder", "/temp");
+            this._utils.deleteDirectory(options.outputDirectory + "/temp");
+            console.log("Renamed from", oldFullPath.replace("//", '/'));
+            console.log(`Renamed to ${options.outputDirectory}/${options.projectName}.ch5z`);
           });
         });
       };
       const zipPath = options.directoryName + '/' + oldProjectName;
-      console.log("zipPath", zipPath);
       const resultCH5: Promise<void> = extract(zipPath, { dir: options.outputDirectory + "/temp" });
       resultCH5.then(onExtractionCH5Complete);
     };
