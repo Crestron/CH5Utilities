@@ -11,6 +11,5 @@ docs
 build
 coverage
 test-report.xml
-output-test
+output
 backup
-*.ch5z

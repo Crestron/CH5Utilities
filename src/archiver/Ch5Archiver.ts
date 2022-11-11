@@ -74,57 +74,61 @@ export class Ch5Archiver implements ICh5Archiver {
   public async renameArchive(options: IConfigOptions): Promise<void> {
     console.log('renameArchive.options', options);
     this._utils.checkExistingDirectory(options.outputDirectory, options.outputLevel);
-    console.log("Source Archive:", options.sourceArchive);
-    console.log("Extract Zip");
-    const result: Promise<void> = extract(options.sourceArchive, { dir: options.outputDirectory });
-    const onExtractioncomplete = () => {
+    console.log("Extract Zip", options.sourceArchive);
+    const resultCH5z: Promise<void> = extract(options.sourceArchive, { dir: options.outputDirectory });
+    const onExtractionCH5zComplete = async () => {
       const ch5 = options.outputDirectory + '/' + options.sourceArchive.replace(".ch5z", ".ch5");
       console.log("Extraction complete", ch5);
       const manifest = options.outputDirectory + '/' + options.sourceArchive.replace(".ch5z", "_manifest.json");
       console.log("Extraction complete", manifest);
-      var json = require(manifest);
-      console.log('before renaming project name', json);
-      console.log(`Rename from ${json["projectname"]} to ${options.projectName}`);
-      json["projectname"] = options.projectName;
-      console.log('after renaming project name', json);
-      /*
-      console.log("check for contract editor config file. if exists then process it.");
-      if (!!options.contractFile) {
-        this.addContractFileToConfig(options);
-      }
-      console.log("create outputDirectory, else we cannot create temp directory");
-      this._utils.checkExistingDirectory(options.outputDirectory, options.outputLevel);
-      
-      console.log("create app ui manifest file");
-      this._metadataGenerator.generateAppUiManifest(options);
-      
-      console.log("app ui manifest file");
-      await this._metadataGenerator.addAppUiMetadata(options, IoConstants.getAppUiManifestFilePath(options.directoryName));
-      
-      console.log("change target directory to outputDirectory/temp");
-      const tmpOptions = { ...options };
-      tmpOptions.outputDirectory = tmpOptions.outputDirectory + "/temp";
-      
-      console.log("inner archive");
-      await this.archive(tmpOptions, ArchiveExtensions.CH5_EXTENSION);
-      
-      console.log("project manifest file");
-      await this._metadataGenerator.generateMetadataFile(tmpOptions, ArchiveExtensions.CH5_EXTENSION);
-      */
-      /*      
-      console.log("change source directory to outputDirectory/temp");
-      const tmpOptions2 = { ...options };
-      tmpOptions2.directoryName = tmpOptions.outputDirectory;
-      
-      console.log("final archive");
-      const result = await this.archive(tmpOptions2, ArchiveExtensions.CH5Z_EXTENSION);
-      
-      console.log("delete temp directory");
-      this._utils.deleteDirectory(tmpOptions.outputDirectory);
-      */
+      const json = require(manifest);
+      const oldProjectName = json["projectname"];
+      const oldDirectoryName = options.directoryName;
+      console.log("before renaming project name", json);
+      json["projectname"] = options.projectName + ".ch5";
+      console.log("after renaming project name", json);
+      options.directoryName = options.outputDirectory;
+      const onExtractionCH5Complete = async () => {
+        /*
+        validate app contents
+        */
+        options.directoryName = options.outputDirectory + "/temp";
+        console.log("TEMP directoryName", options.directoryName);
+        options.outputDirectory = options.outputDirectory + "/ch5";
+        console.log("CH5 outputDirectory", options.outputDirectory);
+        // inner ch5
+        await this.archive(options, ArchiveExtensions.CH5_EXTENSION).then(async () => {
+          const oldFullPath = `${oldDirectoryName}/${oldProjectName}z`;
+          console.log("Renamed from", oldFullPath.replace("//", '/'));
+          console.log(`Renamed to ${options.outputDirectory}/${options.projectName}.ch5z`);
+          const fs = require('fs');
+          const callback = (err: any) => {
+            if (err) {
+              throw err;
+            }
+          };
+          const newManifest = `${options.outputDirectory}/${options.projectName}_manifest.json`;
+          console.log("CH5 Manifest", newManifest);
+          // fs.copyFile(manifest, newManifest, callback);
+          fs.writeFile(newManifest, JSON.stringify(json), callback);
+          options.outputDirectory = options.outputDirectory.replace("/ch5", "/ch5z");
+          console.log("CH5Z outputDirectory", options.outputDirectory);
+          // final ch5z
+          options.directoryName = options.directoryName.replace("/temp", "/ch5");
+          console.log("CH5Z directoryName", options.directoryName);
+          await this.archive(options, ArchiveExtensions.CH5Z_EXTENSION).then(() => {
+            // this._utils.deleteDirectory("ch5");
+            // this._utils.deleteDirectory("temp");
+          });
+        });
+      };
+      const zipPath = options.directoryName + '/' + oldProjectName;
+      console.log("zipPath", zipPath);
+      const resultCH5: Promise<void> = extract(zipPath, { dir: options.outputDirectory + "/temp" });
+      resultCH5.then(onExtractionCH5Complete);
     };
-    result.then(onExtractioncomplete);
-    return result;
+    resultCH5z.then(onExtractionCH5zComplete);
+    return resultCH5z;
   }
 
   private validateDirectoryContents(options: IConfigOptions): void {
@@ -185,9 +189,6 @@ export class Ch5Archiver implements ICh5Archiver {
     });
   }
 
-  private extractZip() {
-
-  }
   /**
    * Register Output Events
    * @param output 
