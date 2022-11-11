@@ -37,7 +37,7 @@ const config: IConfigOptions = {
   "slowMode": false,
   "appUiManifestParams": "",
   "projectManifestParams": "",
-  "sourceArchive": "shell-template.ch5z"
+  "sourceArchive": "shell-template.ch5z" // undefined or empty string for createArchive
 };
 
 let commands = process.argv;
