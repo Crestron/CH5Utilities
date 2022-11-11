@@ -11,9 +11,9 @@ import { DeviceTypeEnum, OutputLevelEnum } from './enums';
 import { archiver, distributor } from "./index";
 
 const config: IConfigOptions = {
-  "projectName": "ch5-showcase-app",
-  "directoryName": "../CH5ShowcaseApp/dist/downloads/ShowcaseApp",
-  "outputDirectory": "output-test",
+  "projectName": "new-shell-template-v2", // "ch5-showcase-app",
+  "directoryName": "./", // "../CH5ShowcaseApp/dist/downloads/ShowcaseApp",
+  "outputDirectory": "/Users/mruanova-hurtado/git/CH5Utilities/output-test", // "output-test",
   "outputLevel": OutputLevelEnum.Verbose,
   "additionalAppuiManifestParameters": {
     "testing-key": "testing-val",
@@ -37,7 +37,7 @@ const config: IConfigOptions = {
   "slowMode": false,
   "appUiManifestParams": "",
   "projectManifestParams": "",
-  "sourceArchive": ""
+  "sourceArchive": "shell-template.ch5z"
 };
 
 let commands = process.argv;

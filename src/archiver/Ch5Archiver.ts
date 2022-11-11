@@ -13,7 +13,6 @@ import { ICh5Archiver, IConfigOptions, IMetadataGenerator } from "../interfaces"
 import { IUtils } from "../interfaces/IUtils";
 import { ArchiveExtensions } from "../enums";
 import IoConstants from "../ioConstants";
-import { exec } from "child_process";
 
 export class Ch5Archiver implements ICh5Archiver {
   private readonly _utils: IUtils;
@@ -72,55 +71,59 @@ export class Ch5Archiver implements ICh5Archiver {
    * @param options
    * @returns 
    */
-  public async renameArchive(options: IConfigOptions): Promise<string> {
-    // extract-zip 
-    await this.extractZip(options, ArchiveExtensions.CH5Z_EXTENSION);
-    // then change directory into the folder
-    var oShell = WScript.CreateObject("WScript.Shell");
-    oShell.Exec(`cd ${options.outputDirectory}`);
-    // then change the name in the package.json file
-    oShell.Exec(`npm pkg set name ${options.projectName}`);
-    // ActiveXObject
-    /*
-    var wshShell = new ActiveXObject("WScript.Shell");
-    wshShell.Run("D:\\dir\\user.bat");
-    */
-    // child process
-    /*
-    var runnableScript = exec('path_to.bat', (error, stdout, stderr) => {
-      console.log(stdout);
-      console.log(stderr);
-      if (error !== null) {
-        console.log(`exec error: ${error}`);
-      }
-    });
-    */    
-    // validate app contents
-    this.validateDirectoryContents(options);
-    // check for contract editor config file. if exists then process it.
-    if (!!options.contractFile) {
-      this.addContractFileToConfig(options);
-    }
-    // create outputDirectory, else we cannot create temp directory
+  public async renameArchive(options: IConfigOptions): Promise<void> {
+    console.log('renameArchive.options', options);
     this._utils.checkExistingDirectory(options.outputDirectory, options.outputLevel);
-    // create app ui manifest file
-    this._metadataGenerator.generateAppUiManifest(options);
-    // app ui manifest file
-    await this._metadataGenerator.addAppUiMetadata(options, IoConstants.getAppUiManifestFilePath(options.directoryName));
-    // change target directory to outputDirectory/temp
-    const tmpOptions = { ...options };
-    tmpOptions.outputDirectory = tmpOptions.outputDirectory + "/temp";
-    // inner archive
-    await this.archive(tmpOptions, ArchiveExtensions.CH5_EXTENSION);
-    // project manifest file
-    await this._metadataGenerator.generateMetadataFile(tmpOptions, ArchiveExtensions.CH5_EXTENSION);
-    // change source directory to outputDirectory/temp
-    const tmpOptions2 = { ...options };
-    tmpOptions2.directoryName = tmpOptions.outputDirectory;
-    // final archive
-    const result = await this.archive(tmpOptions2, ArchiveExtensions.CH5Z_EXTENSION);
-    // delete temp directory
-    this._utils.deleteDirectory(tmpOptions.outputDirectory);
+    console.log("Source Archive:", options.sourceArchive);
+    console.log("Extract Zip");
+    const result: Promise<void> = extract(options.sourceArchive, { dir: options.outputDirectory });
+    const onExtractioncomplete = () => {
+      const ch5 = options.outputDirectory + '/' + options.sourceArchive.replace(".ch5z", ".ch5");
+      console.log("Extraction complete", ch5);
+      const manifest = options.outputDirectory + '/' + options.sourceArchive.replace(".ch5z", "_manifest.json");
+      console.log("Extraction complete", manifest);
+      var json = require(manifest);
+      console.log('before renaming project name', json);
+      console.log(`Rename from ${json["projectname"]} to ${options.projectName}`);
+      json["projectname"] = options.projectName;
+      console.log('after renaming project name', json);
+      /*
+      console.log("check for contract editor config file. if exists then process it.");
+      if (!!options.contractFile) {
+        this.addContractFileToConfig(options);
+      }
+      console.log("create outputDirectory, else we cannot create temp directory");
+      this._utils.checkExistingDirectory(options.outputDirectory, options.outputLevel);
+      
+      console.log("create app ui manifest file");
+      this._metadataGenerator.generateAppUiManifest(options);
+      
+      console.log("app ui manifest file");
+      await this._metadataGenerator.addAppUiMetadata(options, IoConstants.getAppUiManifestFilePath(options.directoryName));
+      
+      console.log("change target directory to outputDirectory/temp");
+      const tmpOptions = { ...options };
+      tmpOptions.outputDirectory = tmpOptions.outputDirectory + "/temp";
+      
+      console.log("inner archive");
+      await this.archive(tmpOptions, ArchiveExtensions.CH5_EXTENSION);
+      
+      console.log("project manifest file");
+      await this._metadataGenerator.generateMetadataFile(tmpOptions, ArchiveExtensions.CH5_EXTENSION);
+      */
+      /*      
+      console.log("change source directory to outputDirectory/temp");
+      const tmpOptions2 = { ...options };
+      tmpOptions2.directoryName = tmpOptions.outputDirectory;
+      
+      console.log("final archive");
+      const result = await this.archive(tmpOptions2, ArchiveExtensions.CH5Z_EXTENSION);
+      
+      console.log("delete temp directory");
+      this._utils.deleteDirectory(tmpOptions.outputDirectory);
+      */
+    };
+    result.then(onExtractioncomplete);
     return result;
   }
 
@@ -182,37 +185,9 @@ export class Ch5Archiver implements ICh5Archiver {
     });
   }
 
-  /**
-   * Extract Zip the source archive
-   * @param options 
-   * @param extension 
-   * @returns 
-   */
-  private extractZip(options: IConfigOptions, extension: string): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      const sourceArchive = options.sourceArchive;
-      const outputDirectory = options.outputDirectory;
-      this._utils.checkExistingDirectory(outputDirectory, options.outputLevel);
-      /*
-      const outputFileName = `${outputDirectory}/${options.projectName}.${extension}`;
-      const output = fs.createWriteStream(outputFileName);
-      this.registerOutputEvents(output, outputFileName, resolve, reject);
-      */
-      // Unzip the source-archive 
-      extract(sourceArchive, { dir: outputDirectory });
-      console.log('Extraction complete');
-      /*
-      this.registerArchiveEvents(archive, outputFileName, resolve, reject);
-      // pipe archive data to the file
-      archive.pipe(output);
-      // append source directory
-      archive.directory(options.directoryName, "");
-      // wrap up
-      archive.finalize();
-      */
-    });
-  }
+  private extractZip() {
 
+  }
   /**
    * Register Output Events
    * @param output 

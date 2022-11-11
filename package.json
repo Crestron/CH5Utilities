@@ -24,7 +24,8 @@
     "build": "npm run clean && npm run tsc",
     "help": "ts-node src/index.ts",
     "publish:local": "npm run build && npm unlink && npm link",
-    "setup:local": "npm install && npm run build && npm link"
+    "setup:local": "npm install && npm run build && npm link",
+    "build:copyfiles": "npm run build && copyfiles -u 1 build_bundles/**/* ./../CH5UtilitiesCli/node_modules/@crestron/ch5-utilities/build_bundles/"
   },
   "keywords": [
     "ch5",

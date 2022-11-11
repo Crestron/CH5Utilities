@@ -65,7 +65,7 @@ Running `npm run start:distribute` will run the **distribute** function based on
 
 ### npm run start:js
 
-Same as `npm run start`, but will run the bundled JS version of the library ( the one in the ``build`` directory ).
+Same as `npm run start:js`, but will run the bundled JS version of the library ( the one in the ``build`` directory ).
 
 ### npm run start:js:archive
 
