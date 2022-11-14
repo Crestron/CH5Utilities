@@ -13,4 +13,5 @@ coverage
 test-report.xml
 output
 temp
+appui
 backup
