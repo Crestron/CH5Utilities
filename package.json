@@ -14,8 +14,6 @@
   "types": "build/@types/index.d.ts",
   "scripts": {
     "clean": "rimraf build",
-    "copyWin": "npm run build && copyfiles -u 1 build/**/* ./../CH5UtilitiesCli/node_modules/@crestron/ch5-utilities/build/",
-    "copyMac": "npm run build && copyfiles -u 1 'build/**/*' './../CH5UtilitiesCli/node_modules/@crestron/ch5-utilities/build/'",
     "tsc": "tsc --outDir build --declaration --declarationDir build/@types",
     "start": "npm run start:archive && npm run start:distribute",
     "start:archive": "ts-node src/start.ts archive",
