@@ -11,9 +11,9 @@ import { DeviceTypeEnum, OutputLevelEnum } from './enums';
 import { archiver, distributor } from "./index";
 
 const config: IConfigOptions = {
-  "projectName": "new-shell-template-v2", // "ch5-showcase-app",
+  "projectName": "my-project-v1.0.0", // "ch5-showcase-app",
   "directoryName": "./", // "../CH5ShowcaseApp/dist/downloads/ShowcaseApp",
-  "outputDirectory": "/Users/mruanova-hurtado/git/CH5Utilities", // "output",
+  "outputDirectory": "/Users/${USERNAME}/git/CH5Utilities", // "output",
   "outputLevel": OutputLevelEnum.Verbose,
   "additionalAppuiManifestParameters": {
     "testing-key": "testing-val",

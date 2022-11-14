@@ -57,7 +57,15 @@ Running `npm run start` will run the **archive&deploy** functions based on the c
 
 ### npm run start:archive
 
-Running `npm run start:archive` will run the **archive** function based on the config in the `src/start.ts` file.
+Running `npm run start:archive` will run the **archive** function based on the config in the `src/start.ts` file, sourceArchive should be undefined or empty string.
+
+### Rename shell-template.ch5z to my-project-v1.0.0.ch5z
+
+Running `npm run start:archive` will rename shell-template.ch5z to my-project-v1.0.0.ch5z, sourceArchive should be shell-template.ch5z and projectName should be my-project-v1.0.0.ch5z.
+
+### Deploy my-project-v1.0.0.ch5z file to the TSW
+
+Running `npx ch5-cli deploy -p -H 10.0.0.60 -t touchscreen my-project-v1.0.0.ch5z` to deploy the ch5z file to the TSW.
 
 ### npm run start:distribute
 

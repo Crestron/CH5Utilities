@@ -14,6 +14,8 @@
   "types": "build/@types/index.d.ts",
   "scripts": {
     "clean": "rimraf build",
+    "copyWin": "npm run build && copyfiles -u 1 build/**/* ./../CH5UtilitiesCli/node_modules/@crestron/ch5-utilities/build/",
+    "copyMac": "npm run build && copyfiles -u 1 'build/**/*' './../CH5UtilitiesCli/node_modules/@crestron/ch5-utilities/build/'",
     "tsc": "tsc --outDir build --declaration --declarationDir build/@types",
     "start": "npm run start:archive && npm run start:distribute",
     "start:archive": "ts-node src/start.ts archive",
@@ -24,8 +26,7 @@
     "build": "npm run clean && npm run tsc",
     "help": "ts-node src/index.ts",
     "publish:local": "npm run build && npm unlink && npm link",
-    "setup:local": "npm install && npm run build && npm link",
-    "build:copyfiles": "npm run build && copyfiles -u 1 build_bundles/**/* ./../CH5UtilitiesCli/node_modules/@crestron/ch5-utilities/build_bundles/"
+    "setup:local": "npm install && npm run build && npm link"
   },
   "keywords": [
     "ch5",
@@ -47,6 +48,7 @@
     "@types/rimraf": "^3.0.2",
     "@types/ssh2": "0.5.48",
     "@types/ssh2-sftp-client": "7.0.0",
+    "copyfiles": "^2.4.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
   },

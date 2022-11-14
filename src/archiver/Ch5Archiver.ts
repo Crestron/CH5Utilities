@@ -67,7 +67,7 @@ export class Ch5Archiver implements ICh5Archiver {
   }
 
   /**
-   * Rename Archive
+   * Rename Archive from shell-template to my-project-v1.0.0
    * @param options
    * @returns 
    */
@@ -76,6 +76,9 @@ export class Ch5Archiver implements ICh5Archiver {
     this._utils.checkExistingDirectory(options.outputDirectory, options.outputLevel);
     console.log("Extract Zip", options.sourceArchive);
     const resultCH5z: Promise<void> = extract(options.sourceArchive, { dir: options.outputDirectory });
+    /**
+     * on Extraction CH5z Complete (final)
+     */
     const onExtractionCH5zComplete = async () => {
       const ch5 = options.outputDirectory + '/' + options.sourceArchive.replace(".ch5z", ".ch5");
       const manifest = options.outputDirectory + '/' + options.sourceArchive.replace(".ch5z", "_manifest.json");
@@ -84,11 +87,16 @@ export class Ch5Archiver implements ICh5Archiver {
       const oldDirectoryName = options.directoryName;
       json["projectname"] = options.projectName + ".ch5";
       options.directoryName = options.outputDirectory;
+      /**
+       * on Extraction CH5 Complete (inner)
+       */
       const onExtractionCH5Complete = async () => {
         options.directoryName = options.outputDirectory + "/temp";
         options.outputDirectory = options.outputDirectory + "/ch5";
-        // inner ch5
-        await this.archive(options, ArchiveExtensions.CH5_EXTENSION).then(async () => {
+        /**
+         * inner CH5 file
+         */
+        const innerCH5 = async () => {
           const oldFullPath = `${oldDirectoryName}/${oldProjectName}z`;
           const fs = require('fs');
           const callback = (err: any) => {
@@ -100,8 +108,10 @@ export class Ch5Archiver implements ICh5Archiver {
           fs.writeFile(newManifest, JSON.stringify(json), callback);
           options.outputDirectory = options.outputDirectory.replace("/ch5", "");
           options.directoryName = options.directoryName.replace("/temp", "/ch5");
-          // final ch5z
-          await this.archive(options, ArchiveExtensions.CH5Z_EXTENSION).then(() => {
+          /**
+           * final CH5Z file
+           */
+          const finalCH5Z = () => {
             console.log("delete temporary file", ch5);
             fs.rm(ch5, callback);
             console.log("delete temporary file", manifest);
@@ -112,8 +122,10 @@ export class Ch5Archiver implements ICh5Archiver {
             this._utils.deleteDirectory(options.outputDirectory + "/temp");
             console.log("Renamed from", oldFullPath.replace("//", '/'));
             console.log(`Renamed to ${options.outputDirectory}/${options.projectName}.ch5z`);
-          });
-        });
+          };
+          await this.archive(options, ArchiveExtensions.CH5Z_EXTENSION).then(finalCH5Z);
+        };
+        await this.archive(options, ArchiveExtensions.CH5_EXTENSION).then(innerCH5);
       };
       const zipPath = options.directoryName + '/' + oldProjectName;
       const resultCH5: Promise<void> = extract(zipPath, { dir: options.outputDirectory + "/temp" });
@@ -123,6 +135,10 @@ export class Ch5Archiver implements ICh5Archiver {
     return resultCH5z;
   }
 
+  /**
+   * Validate Directory Contents
+   * @param options 
+   */
   private validateDirectoryContents(options: IConfigOptions): void {
     const indexFilePath = `${options.directoryName}/index.html`;
     this._utils.validateFileExists(indexFilePath);
