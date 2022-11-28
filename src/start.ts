@@ -28,7 +28,7 @@ const config: IConfigOptions = {
   "controlSystemHost": "10.0.0.203",
   "sftpUser": "crestron",
   "sftpPassword": "",
-  "promptForCredential": true,
+  "promptForCredential": false,
   "sftpDirectory": "display",
   "deviceType": DeviceTypeEnum.TouchScreen,
   "contractFile": undefined,

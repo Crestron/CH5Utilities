@@ -21,10 +21,8 @@ export const archiver = async (options: IConfigOptions): Promise<void> => {
   const metadataGenerator = new MetadataGenerator(utils);
   const ch5Archiver = new Ch5Archiver(utils, metadataGenerator);
   if (options.sourceArchive) {
-    console.log("IF sourceArchive THEN Rename Archive");
     await ch5Archiver.renameArchive(options);
   } else {
-    console.log("Create Archive");
     await ch5Archiver.createArchive(options);
   }
 };

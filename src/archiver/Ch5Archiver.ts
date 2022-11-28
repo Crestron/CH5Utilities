@@ -72,9 +72,7 @@ export class Ch5Archiver implements ICh5Archiver {
    * @returns 
    */
   public async renameArchive(options: IConfigOptions): Promise<void> {
-    console.log('renameArchive.options', options);
     this._utils.checkExistingDirectory(options.outputDirectory, options.outputLevel);
-    console.log("Extract Zip", options.sourceArchive);
     const resultCH5z: Promise<void> = extract(options.sourceArchive, { dir: options.outputDirectory });
     /**
      * on Extraction CH5z Complete (final)
@@ -112,13 +110,9 @@ export class Ch5Archiver implements ICh5Archiver {
            * final CH5Z file
            */
           const finalCH5Z = () => {
-            console.log("delete temporary file", ch5);
             fs.rm(ch5, callback);
-            console.log("delete temporary file", manifest);
             fs.rm(manifest, callback);
-            console.log("delete temporary folder", "/ch5");
             this._utils.deleteDirectory(options.outputDirectory + "/ch5");
-            console.log("delete temporary folder", "/temp");
             this._utils.deleteDirectory(options.outputDirectory + "/temp");
             console.log("Renamed from", oldFullPath.replace("//", '/'));
             console.log(`Renamed to ${options.outputDirectory}/${options.projectName}.ch5z`);
