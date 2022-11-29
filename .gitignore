@@ -11,5 +11,7 @@ docs
 build
 coverage
 test-report.xml
-output-test
+output
+temp
+appui
 backup

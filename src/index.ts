@@ -10,7 +10,6 @@ import { Utils, ConsoleLogger } from './utils';
 import { Ch5Archiver } from "./archiver";
 import { Ch5Distributor } from "./distributor";
 import { MetadataGenerator } from "./metadata";
-import { DeviceTypeEnum } from "./enums";
 
 export { IConfigOptions as ConfigOptions } from './interfaces';
 export { DeviceTypeEnum as DeviceType } from "./enums";
@@ -21,8 +20,11 @@ export const archiver = async (options: IConfigOptions): Promise<void> => {
   const utils = new Utils(logger);
   const metadataGenerator = new MetadataGenerator(utils);
   const ch5Archiver = new Ch5Archiver(utils, metadataGenerator);
-
-  await ch5Archiver.createArchive(options);
+  if (options.sourceArchive) {
+    await ch5Archiver.renameArchive(options);
+  } else {
+    await ch5Archiver.createArchive(options);
+  }
 };
 
 export const distributor = async (filename: string, options: IConfigOptions): Promise<void> => {

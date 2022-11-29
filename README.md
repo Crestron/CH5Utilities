@@ -20,9 +20,9 @@ The purpose of the library is to satisfy three functions:
 
 - archiving - create a package that can distributed manually or with the utility
 - distribution - deploy a package built with the utility
-- archive & distribute - single command for both of the above
+- archive & distribute - single command for both above
 
-The final result of the archiving will be a .ch5z package.
+The result of the archiving will be a .ch5z package.
 This contains two files:
 
 - *.ch5 - the actual package
@@ -32,17 +32,17 @@ This contains two files:
 
 Install the required packages.
 ```
-yarn install
+npm install
 ```
 
 Build the library.
 ```
-yarn build
+npm run build
 ```
 
 Publish the ch5-utilities library for local usage.
 ```
-yarn link
+npm link
 ```
 
 ## Commands
@@ -51,31 +51,39 @@ The commands is for development, debugging, and testing purposes only.
 
 Before running, make sure that all the values are properly modified for local usage, in the `config` variable in `start.ts`.
 
-#### yarn start
+### npm run start
 
-Running `yarn start` will run the **archive&deploy** functions based on the config in the `src/start.ts` file.
+Running `npm run start` will run the **archive&deploy** functions based on the config in the `src/start.ts` file.
 
-#### yarn start:archive
+### npm run start:archive
 
-Running `yarn start:archive` will run the **archive** function based on the config in the `src/start.ts` file.
+Running `npm run start:archive` will run the **archive** function based on the config in the `src/start.ts` file, sourceArchive should be undefined or empty string.
 
-#### yarn start:distribute
+### Rename shell-template.ch5z to my-project-v1.0.0.ch5z
 
-Running `yarn start:distribute` will run the **distribute** function based on the config in the `src/start.ts` file.
+Running `npm run start:archive` will rename shell-template.ch5z to my-project-v1.0.0.ch5z, sourceArchive should be shell-template.ch5z and projectName should be my-project-v1.0.0.ch5z.
 
-#### yarn start:js
+### Deploy my-project-v1.0.0.ch5z file to the TSW
 
-Same as `yarn start`, but will run the bundled JS version of the library ( the one in the ``build`` directory ).
+Running `npx ch5-cli deploy -p -H 10.0.0.60 -t touchscreen my-project-v1.0.0.ch5z` to deploy the ch5z file to the TSW.
 
-#### yarn start:js:archive
+### npm run start:distribute
 
-Same as `yarn start:archive`, but will run the bundled JS version of the library ( the one in the ``build`` directory ).
+Running `npm run start:distribute` will run the **distribute** function based on the config in the `src/start.ts` file.
 
-#### yarn start:js:distribute
+### npm run start:js
 
-Same as `yarn start:distribute`, but will run the bundled JS version of the library ( the one in the ``build`` directory ).
+Same as `npm run start:js`, but will run the bundled JS version of the library ( the one in the ``build`` directory ).
 
-#### yarn publish:local
+### npm run start:js:archive
+
+Same as `npm run start:archive`, but will run the bundled JS version of the library ( the one in the ``build`` directory ).
+
+### npm run start:js:distribute
+
+Same as `npm run start:distribute`, but will run the bundled JS version of the library ( the one in the ``build`` directory ).
+
+### npm run publish:local
 
 After the initial setup, you can use this command to rebuild and publish changes in the library.
 
@@ -85,7 +93,7 @@ The  methods `archiver` and `distributor` from `src/index.ts` expect a to get a 
 
 Below we describe each property, their purpose and possible values.
 
-#### projectName 
+### projectName 
 
 Required.
 
@@ -94,7 +102,7 @@ It should be set according to the delivered package.
 
 Default value is ``crestron-system``.
 
-#### directoryName
+### directoryName
 
 Required.
 
@@ -104,7 +112,7 @@ Currently this is the showcase-app dist directory.
 
 The path can be absolute or should be relative to the location from which the command is run in the CLI.
 
-#### outputDirectory
+### outputDirectory
 
 Required.
 
@@ -112,7 +120,7 @@ This is the path where the package files will be copied to.
 
 The path can be absolute or should be relative to the location from which the command is run in the CLI.
 
-#### outputLevel
+### outputLevel
 
 Optional
 
@@ -120,29 +128,29 @@ This sets the level of CLI logging that is required.
 
 Possible values are: ``quiet | normal | verbose``.
 
-#### additionalAppuiManifestParameters
+### additionalAppuiManifestParameters
 
 Optional.
 
 This is a key-value collection that can be used to set extra details in the app ( in this case showcase-app ) manifest JSON file.
 
-#### additionalProjectManifestParameters
+### additionalProjectManifestParameters
 
 Optional.
 
 This is a key-value collection that can be used to set extra details in the project manifest JSON file. 
 
-#### controlSystemHost
+### controlSystemHost
 
 Required.
 
 This should be the hostname or IP address of the device where the package will be deployed.
 
-#### promptForCredential
+### promptForCredential
 
 This will always be set to true, since the utility will always prompt for the credentials in the CLI.
 
-#### sftpDirectory
+### sftpDirectory
 
 Required.
 
@@ -152,7 +160,7 @@ It must be relative to the SFTP root directory.
 
 It will be ``display`` for the showcase-app, or ``HTML`` for CCS.
 
-#### deviceType
+### deviceType
 
 Required.
 
@@ -160,7 +168,7 @@ This should be set based on the ``controlSystemHost``, depending on what kind of
 
 Possible values are: ``touchscreen | controlsystem | web``.
 
-#### contractFile
+### contractFile
 
 Optional
 
