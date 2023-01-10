@@ -24,6 +24,9 @@ export interface IConfigOptions {
   privateKey: string | undefined; // Relative or absolute file path for private key.
   passphrase: string | undefined; // Passphrase for the private key 
   slowMode: boolean; // flag to be used when deploying to touchscreen devices
+  appUiManifestParams: string; // Additional app UI manifest parameters. Send as a comma separated list of key-value pairs ( key1=value1,key2=value2 ). Optional.
+  projectManifestParams: string; // Additional project manifest parameters. Send as a comma separated list of key-value pairs ( key1=value1,key2=value2 ). Optional.
+  sourceArchive: string; // used for renaming an existing archive
 }
 
 export interface IAdditionalParameters {
