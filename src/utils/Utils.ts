@@ -35,7 +35,7 @@ export class Utils implements IUtils {
 
   public deleteDirectory(directoryName: string): void {
     const existsDir = fs.existsSync(`${directoryName}`) ? fs.lstatSync(directoryName) : null;
-    if (existsDir && existsDir.isDirectory) {
+    if (existsDir && existsDir.isDirectory()) {
       rimraf.sync(directoryName);
     }
   }
